@@ -154,7 +154,7 @@ void Execution_Order()
 }
 void RoundRobin()
 {
-	int m,j,i,ts,temp,q;
+	int m,j,i,t,temp,k;
      int aw; float awt;
      int bt[10],w[10],te[10],rt[10],at[10];j=0;
     for(i=0;i<Number;i++)
@@ -179,7 +179,7 @@ void RoundRobin()
          }
      }
     printf("\n Please enter time quantum :   ");
-    scanf("%d",&ts); q=0;
+    scanf("%d",&t); k=0;
     printf("\nprocess      :")  ;
     for(i=0;i<Number;i++)
      {
@@ -195,7 +195,7 @@ void RoundRobin()
       {
           printf("  %d",at[i]);
       }
-    printf("\n\n ***Gannt chart*** \n");
+    printf("\n\n *Daily Report* \n");
     j=0;
 
     while(j<=Number)
@@ -204,18 +204,18 @@ void RoundRobin()
           for(i=0;i<Number;i++)
             {
               if(rt[i]==0)  continue;
-                   if(rt[i]>ts)
+                   if(rt[i]>t)
                      {
-                        printf("\n %d\t P%d",q,i+1);
-                        q=q+ts;
-                        rt[i]=rt[i]-ts;
+                        printf("\n %d\t P%d",k,i+1);
+                        k=k+t;
+                        rt[i]=rt[i]-t;
                         te[i]=te[i]+1;
                      }
                   else
                     {
-                       printf("\n %d\t P%d",q,i+1);
-                       w[i]=q-te[i]*ts;
-                       q=q+rt[i]; 
+                       printf("\n %d\t P%d",k,i+1);
+                       w[i]=k-te[i]*t;
+                       k=k+rt[i]; 
                        rt[i]=rt[i]-rt[i];
                     }
             }
