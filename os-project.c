@@ -1,12 +1,42 @@
 #include<stdio.h>
-#include<conio.h>
-struct Project
+
+struct process{
+    int pid;
+    int arrivaltime;
+    int bursttime;
+    int completetime;
+    int roundbacktime;
+}f[100], s[100], m[100];
+
+int n, fc=0, sc=0, mc=0;
+int quanta;
+
+void input();
+void input8();
+void prmapping();
+void roundrobin();
+void display();
+
+//struct Project
+//{
+//int id,at,bt;
+//}
+//f[100],s[100],E[100];
+
+int main()
 {
-int id,at,bt;
+        printf("                      ***Welcome***               \n1.Please enter the time as shown Ex.10 30 \n2.All the timings should be in ascending order \n");
+
+    input8();
+    prmapping();
+    roundrobin();
+    display();      
+        
 }
-f[100],s[100],E[100];
+
 int Number,Student=0,Faculty=0,count=0;
-void input()
+
+void input8()
 {
 	int job,ah,am,bt,j,m=0,id=1;
 	printf("\n Enter number of Queries: ");
@@ -20,7 +50,7 @@ void input()
 		if(j==1)
 		{
 			printf("Query ID: %d\n",id);
-			s[Student].id=id;
+			s[Student].pid=id;
 			printf("Arrival Time: ");
 			scanf("%d %d",&ah,&am);
 			if((ah<24) && (am<60))
@@ -29,9 +59,9 @@ void input()
 				{
 					if((am>=0) && (am<60))
 					{
-						s[Student].at=600-(ah*60)+am;
+						s[Student].arrivaltime=600-(ah*60)+am;
 						printf("Resolving time: ");
-						scanf("%d",&s[Student].bt);
+						scanf("%d",&s[Student].bursttime);
 						Student++;
 					}
 					else
@@ -46,7 +76,7 @@ void input()
 		else if(j==2)
 		{
 			printf("Query ID: %d\n",id);
-			f[Faculty].id=id;
+			f[Faculty].pid=id;
 			printf("Arrival Time: ");
 			scanf("%d %d",&ah,&am);
 			if((ah<24) && (am<60))
@@ -55,9 +85,9 @@ void input()
 				{
 					if((am>=0) && (am<60))
 					{
-						f[Faculty].at=600-(ah*60)+am;
+						f[Faculty].arrivaltime=600-(ah*60)+am;
 						printf("Resolving time: ");
-						scanf("%d",&f[Faculty].bt);
+						scanf("%d",&f[Faculty].bursttime);
 						Faculty++;
 					}
 					else
@@ -72,185 +102,111 @@ void input()
 		else
 		{
 		printf("please enter valid input\n");
-		input();
+		input8();
 		}
 		id++;
 	}
 }
-void Execution_Order()
-{
-	int ids=0,idf= 0;
-	if( Faculty!=0  && Student!=0)
-	{
-		while(ids<Student && idf<Faculty)
-		{
-			if(f[idf].at == s[ids].at)
-			{
-				E[count] = f[idf];
-				count++;
-				idf++;
-				E[count]= s[ids];
-				count++;
-				ids++;
-			}
-			else if(f[idf].at < s[ids].at)
-			{
-				E[count]= f[idf];
-				count++;
-				idf++;
-			}
-			else if(f[idf].at > s[ids].at)
-			{
-				E[count]= s[ids];
-				count++;
-				ids++;
-			}
-			else;
-		}
-		if(count != (Faculty+Student))
-		{
-			if(Faculty!=idf)
-			{
-				while(idf!=Faculty)
-				{
-					E[count]= f[idf];
-					count++;
-					idf++;
-				}
-			}
-			else if(Student!=ids)
-			{
-				while(ids!=Student)
-				{
-					E[count]= s[ids];
-					count++;
-					ids++;
-				}
-			}
-		}
-	}
-	else if(Faculty==0)
-	{
-		while(ids!=Student)
-		{
-			E[count]= s[ids];
-			count++;
-			ids++;
-		}
-	}
-	else if(Student==0)
-	{
-		while(idf!=Faculty)
-		{
-			E[count]= f[idf];
-			count++;
-			idf++;
-		}
-	}
-	else 
-	{
-		printf("\n No valid Jobs available\n");
-	}
-}
-void RoundRobin()
-{
-	int m,j,i,t,temp,k;
-     int aw; float awt;
-     int bt[10],w[10],te[10],rt[10],at[10];j=0;
-    for(i=0;i<Number;i++)
-      {
-          at[i]=E[i].at;
-          bt[i]=E[i].bt;
-          te[i]=0;     w[i]=0;
-      }
-    for(i=0;i<Number;i++)
-      {
-        for(j=i+1;j<Number;j++)
-         {
-             if(at[i]>at[j])
-               {
-                    temp=at[i];                                          
-                    at[i]=at[j];
-                    at[j]=temp;
-                    temp=bt[i];
-                    bt[i]=bt[j];
-                    bt[j]=temp;
-              }
-         }
-     }
-    printf("\n Please enter time quantum :   ");
-    scanf("%d",&t); k=0;
-    printf("\nprocess      :")  ;
-    for(i=0;i<Number;i++)
-     {
-       printf("  %d",i+1);
-      }
-    printf("\nBrust time   :");
-    for(i=0;i<Number;i++)
-       {
-         printf("  %d",bt[i]); rt[i]=bt[i];
-        }
-    printf("\nArrival time :");
-    for(i=0;i<Number;i++)
-      {
-          printf("  %d",at[i]);
-      }
-    printf("\n\n *Daily Report* \n");
-    j=0;
 
-    while(j<=Number)
-       {
-          j++;
-          for(i=0;i<Number;i++)
-            {
-              if(rt[i]==0)  continue;
-                   if(rt[i]>t)
-                     {
-                        printf("\n %d\t P%d",k,i+1);
-                        k=k+t;
-                        rt[i]=rt[i]-t;
-                        te[i]=te[i]+1;
-                     }
-                  else
-                    {
-                       printf("\n %d\t P%d",k,i+1);
-                       w[i]=k-te[i]*t;
-                       k=k+rt[i]; 
-                       rt[i]=rt[i]-rt[i];
-                    }
+void prmapping(){
+    int isc=0, ifc= 0, min, flag;
+    if( fc!=0  && sc!=0){
+        while(isc<sc && ifc<fc){
+            if(f[ifc].arrivaltime == s[isc].arrivaltime){
+                m[mc] = f[ifc];
+                mc++;
+                ifc++;
+                m[mc]= s[isc];
+                mc++;
+                isc++;
             }
-       }                                      
-	   
-	printf("\n"); 
-    awt=0;
-    printf("\n Process       Waiting time        Turn Around time");
-    int ta[Number],tat=0;
-	float atat=0;
-    for(i=0;i<Number;i++)
-       {
-       	
-                w[i]=w[i]-at[i];
-                if(w[i]<0)
-				{
-				w[i]=w[i]-2*w[i];
-				}
-                ta[i]=w[i]+bt[i];
-                printf("\n P%d\t\t  %d\t\t\t  %d",i+1,w[i],ta[i]);
-                tat=tat+ta[i];
-				awt=awt+w[i];
+            else if(f[ifc].arrivaltime < s[isc].arrivaltime){
+                m[mc]= f[ifc];
+                mc++;
+                ifc++;
+            }
+            else if(f[ifc].arrivaltime > s[isc].arrivaltime){
+                m[mc]= s[isc];
+                mc++;
+                isc++;
+            }
+            else;
         }
-    atat=tat;
-    printf("\n Total Query Time :  %d",tat);
-    printf("\n Average Query Time is:  %f ",(atat/Number));
+        if(mc != (fc+sc)){
+            if(fc!=ifc){
+                while(ifc!=fc){
+                    m[mc]= f[ifc];
+                    mc++;
+                    ifc++;
+                }
+            }
+            else if(sc!=isc){
+                while(isc!=sc){
+                    m[mc]= s[isc];
+                    mc++;
+                    isc++;
+                }
+            }
+        }
+    }
+    else if(fc==0){
+        while(isc!=sc){
+            m[mc]= s[isc];
+            mc++;
+            isc++;
+        }
+    }
+    else if(sc==0){
+        while(ifc!=fc){
+            m[mc]= f[ifc];
+            mc++;
+            ifc++;
+        }
+    }
+    else {
+        printf("\n No valid Jobs available\n");
+    }
 }
-      start()
-{
-	input();
-	Execution_Order();
-	RoundRobin();
+
+void roundrobin(){
+    int time= m[0].arrivaltime, mark=0, cc=0, i, rc;
+    while(time!=120 && cc!=mc){
+        for(i=0; i<=mark; i++){
+            if(m[i].roundbacktime > quanta){
+                time += quanta;
+                m[i].roundbacktime -= quanta;
+            }
+            else if(m[i].roundbacktime <=quanta && m[i].roundbacktime !=0){
+                time += m[i].roundbacktime;
+                m[i].roundbacktime =0;
+                m[i].completetime = time;
+                cc++;
+            }
+            else;
+        }
+        int start = mark+1;
+        for(rc= start; rc<mc; rc++){
+            if(m[rc].arrivaltime <= time){
+                mark++;
+            }
+        }
+    }   
 }
-int main()
-{
-	printf("                      ***Welcome***               \n1.Please enter the time as shown Ex.10 30 \n2.All the timings should be in ascending order \n");
-	start();
+
+void display(){
+    int i=0, total=0, sum=0; 
+    double avg;
+    printf("\nSummary for the Execution\n");
+    printf("\nQuery ID\tArrival Time\tRessolving Time\tCompletion Time\tTurn Around Time\tWaiting Time");
+    for(i; i<mc; i++){
+        printf("\n%d\t\t%d\t\t%d\t\t%d\t\t%d\t\t\t%d",
+        m[i].pid, (m[i].arrivaltime+1000), m[i].bursttime, (m[i].completetime+1000), (m[i].completetime-m[i].arrivaltime), ((m[i].completetime-m[i].arrivaltime)- m[i].bursttime));
+        total= m[i].completetime;
+        sum+= (m[i].completetime-m[i].arrivaltime);
+    }
+    avg = sum/mc;
+    printf("\n\nTotal time Spent for all queries: %d", total);
+    printf("\nAverage query time: %lf", avg);
+    printf("\nProcess Execution Complete");
 }
+
